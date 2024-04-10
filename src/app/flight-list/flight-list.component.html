@@ -1,0 +1,17 @@
+<div class="card my-5">
+  <div class="card-body">
+    <table class="table table-bordered table-striped">
+      <thead class="thead-dark">
+      <tr>
+        <th scope="col">#</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let flight of flights">
+        <td>{{ flight.id }}</td>
+        <td>{{ flight.name }}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
