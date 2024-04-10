@@ -3,7 +3,9 @@ import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {Flight} from "./flight";
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class FlightService {
 
   private readonly flightsUrl: string;
