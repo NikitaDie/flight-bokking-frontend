@@ -1,12 +1,16 @@
 import { Component } from '@angular/core';
-import {CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray} from "@angular/cdk/drag-drop";
+import {CdkDrag, CdkDragDrop, CdkDropList, CdkDropListGroup, moveItemInArray} from "@angular/cdk/drag-drop";
+import {NgForOf, NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-seatmap',
   standalone: true,
   imports: [
     CdkDropList,
-    CdkDrag
+    CdkDrag,
+    CdkDropListGroup,
+    NgForOf,
+    NgIf
   ],
   templateUrl: './seatmap.component.html',
   styleUrl: './seatmap.component.scss'
