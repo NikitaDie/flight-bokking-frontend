@@ -1,9 +1,11 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, Output} from '@angular/core';
 import {Flight} from "../flight";
 import {FlightService} from "../flight-service.service";
 import {ActivatedRoute} from "@angular/router";
 import {NgForOf, NgIf, NgStyle} from "@angular/common";
 import {SeatmapCreationComponent} from "../seatmap-creation/seatmap-creation.component";
+import EventEmitter from "node:events";
+import {Seatplace} from "../seatplace";
 
 @Component({
   selector: 'app-flight-details',
@@ -18,7 +20,7 @@ import {SeatmapCreationComponent} from "../seatmap-creation/seatmap-creation.com
   styleUrl: './flight-details.component.scss'
 })
 export class FlightDetailsComponent implements OnInit {
-  flight: Flight | undefined;
+  flight: Flight | undefined
 
   constructor(
     private flightService: FlightService,
@@ -34,6 +36,13 @@ export class FlightDetailsComponent implements OnInit {
         });
     } else {
       console.error('Flight ID not found in route parameters');
+    }
+  }
+
+  onUpdate() {
+    if (this.flight)
+    {
+      this.flightService.updateFlight(this.flight);
     }
   }
 }

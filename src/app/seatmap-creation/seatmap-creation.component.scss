@@ -2,20 +2,31 @@ table {
   border-collapse: collapse;
 }
 
-.rowsNumber, th {
+.seatmap {
+  background-color: #1E1F26;
+  padding: 8px 24px 8px 8px;
+  border-radius: 5px;
+  box-shadow: 1px 1px 1rem rgba(0, 0, 0, 0.6);
+  width: fit-content;
+  height: fit-content;
+}
+
+.rowsNumber {
   padding: 8px;
   text-align: center;
-  color: gray;
+  color: white;
   border: none;
 }
 
+th {
+  text-align: center;
+  color: white;
+  border: none;
+}
 
 td {
-  width: fit-content;
-  height: fit-content;
   border: 1px solid red;
   padding: 8px;
-  fill: red;
 }
 
 input[type="checkbox"] {

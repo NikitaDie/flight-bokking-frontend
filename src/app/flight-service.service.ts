@@ -22,4 +22,8 @@ export class FlightService {
     return this.http.get<Flight>(`${this.baseUrl}/flights/${id}`);
   }
 
+  public updateFlight(flight: Flight) {
+    this.http.put(`${this.baseUrl}/flights`, flight).subscribe();
+  }
+
 }
