@@ -1,0 +1,33 @@
+<div class="seatgrid">
+  <table>
+    <thead>
+    <tr>
+      <th></th>
+      <th *ngFor="let col of columns">{{ col }}</th>
+    </tr>
+    </thead>
+    <tbody>
+      <div cdkDropListGroup>
+        <tr *ngFor="let row of rows">
+          <td class="rowsNumber">{{ row }}</td>
+          <td *ngFor="let col of columns" cdkDropList
+              (cdkDropListDropped)="onDrop($event, row,col.charCodeAt(0) - 65)"
+              [cdkDropListEnterPredicate]="canDrop(row, col.charCodeAt(0) - 65)">
+              <ng-container *ngIf="isSeat(row, col.charCodeAt(0) - 65)">
+                  <ng-container *ngIf="isSeatReserved(row, col.charCodeAt(0) - 65)">
+                    <input type="checkbox" class="reserved" checked disabled cdkDrag
+                           (cdkDragStarted)="onDragStarted($event, row, col.charCodeAt(0) - 65)">
+                  </ng-container>
+                  <ng-container *ngIf="!isSeatReserved(row, col.charCodeAt(0) - 65)">
+                    <input type="checkbox" class="available" cdkDrag
+                           (cdkDragStarted)="onDragStarted($event, row, col.charCodeAt(0) - 65)">
+                  </ng-container>
+              </ng-container>
+            <ng-container *ngIf="!isSeat(row, col.charCodeAt(0) - 65)">
+            </ng-container>
+          </td>
+        </tr>
+      </div>
+    </tbody>
+  </table>
+</div>

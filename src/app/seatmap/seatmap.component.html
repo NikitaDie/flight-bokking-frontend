@@ -1,0 +1,7 @@
+<div cdkDropList (cdkDropListDropped)="onDrop($event)">
+  <div *ngFor="let row of tableData; let i = index" cdkDrag>
+    <div *ngFor="let cell of row; let j = index">
+      <div>{{ cell }}</div>
+    </div>
+  </div>
+</div>
