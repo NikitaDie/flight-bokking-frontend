@@ -1,17 +1,20 @@
-<div class="card my-5">
-  <div class="card-body">
-    <table class="table table-bordered table-striped">
-      <thead class="thead-dark">
-      <tr>
-        <th scope="col">#</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let flight of flights">
-        <td>{{ flight.id }}</td>
-        <td>{{ flight.name }}</td>
-      </tr>
-      </tbody>
-    </table>
+<div class="flights-container">
+  <div class="search-box">
+    <svg xmlns="http://www.w3.org/2000/svg"  class="icon-search">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
+      <path d="M21 21l-6 -6" />
+    </svg>
+    <input type="text" placeholder="Search..">
   </div>
+  <ul class="flight-list">
+    <li *ngFor="let flight of flights">
+      <button class="btn btn-primary" [routerLink]="['/flights', flight.id]">
+        <b>{{ flight.name }}</b>
+        <p>Total number of Seats: {{ flight.totalSeatsCount }}</p>
+        <p>Booked Seats: {{ flight.bookedSeatsCount }}</p>
+        <p>Remaining Seats: {{ flight.totalSeatsCount - flight.bookedSeatsCount }}</p>
+      </button>
+    </li>
+  </ul>
 </div>

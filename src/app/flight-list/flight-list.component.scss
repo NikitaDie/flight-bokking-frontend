@@ -1,0 +1,68 @@
+.flights-container {
+  margin: auto;
+  width: fit-content;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+}
+
+.search-box input {
+  max-width: 800px;
+  width: 100%;
+  height: 45px;
+  border: none;
+  background-color: #252830;
+  padding: .4em;
+
+}
+
+.icon-search {
+  color: white;
+  width: 48px;
+  height: 48px;
+  fill: none;
+  stroke: white;
+  stroke-width: 2px;
+}
+
+.flight-list {
+  width: fit-content;
+  margin: auto;
+  padding: 0;
+}
+
+.flight-list li {
+  display: inline-block;
+  width: fit-content;
+  height: fit-content;
+}
+
+.flight-list li button {
+  transition: all 0.3s ease;
+  background-color: #1E1F26;
+  max-width: 500px;
+  border-radius: 5px;
+  box-shadow: 1px 1px 1rem rgba(0, 0, 0, 0.6);
+  padding: 10px;
+  margin: 10px;
+  width: fit-content;
+  height: fit-content;
+  border: 0;
+}
+
+.flight-list li button:hover {
+  transform: scale(1.1);
+}
+
+.flight-list li button b {
+  color: #e6edf3;
+  font-size: 26px;
+}
+
+.flight-list li button p {
+  color: #e6edf3;
+  font-size: 20px;
+  margin: 10px;
+}

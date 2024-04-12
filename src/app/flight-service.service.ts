@@ -8,18 +8,18 @@ import {Flight} from "./flight";
 })
 export class FlightService {
 
-  private readonly flightsUrl: string;
+  private readonly baseUrl: string;
 
   constructor(private http: HttpClient) {
-    this.flightsUrl = 'http://localhost:8080/api/v1/flights';
+    this.baseUrl = 'http://localhost:8080/api/v1';
   }
 
-  public findAll(): Observable<Flight[]> {
-    return this.http.get<Flight[]>(this.flightsUrl);
+  public getFlights(): Observable<Flight[]> {
+    return this.http.get<Flight[]>(`${this.baseUrl}/flights`);
   }
 
-  public save(flight: Flight) {
-    return this.http.post<Flight>(this.flightsUrl, flight);
+  public getFlight(id: number): Observable<Flight> {
+    return this.http.get<Flight>(`${this.baseUrl}/flights/${id}`);
   }
 
 }

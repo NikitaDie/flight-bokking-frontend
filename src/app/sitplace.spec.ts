@@ -1,7 +1,7 @@
-import { Sitplace } from './sitplace';
+import { Seatplace } from './seatplace';
 
 describe('Sitplace', () => {
   it('should create an instance', () => {
-    expect(new Sitplace()).toBeTruthy();
+    expect(new Seatplace()).toBeTruthy();
   });
 });

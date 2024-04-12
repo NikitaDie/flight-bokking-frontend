@@ -1,8 +1,12 @@
-import {Sitplace} from "./sitplace";
+import {Seatplace} from "./seatplace";
 
 export class Flight
 {
-  id?: number;
-  name?: string;
-  seats?: Sitplace[];
+  constructor(
+    public readonly id: number,
+    public readonly name: string,
+    public readonly seats: Seatplace[],
+    public readonly totalSeatsCount: number,
+    public readonly bookedSeatsCount: number,
+  ) {}
 }
