@@ -6,7 +6,7 @@
            (blur)="update(Number(colBox.value), 'colBox')" placeholder="Count of columns">
   </div>
   <div class="seatmap">
-    <table>
+    <table #seatmapTable>
       <thead>
       <tr>
         <th></th>
@@ -18,7 +18,10 @@
         <td class="rowsNumber">{{ row + 1 }}</td>
         <td *ngFor="let col of columns" cdkDropList
             (cdkDropListDropped)="onDrop($event, row,col.charCodeAt(0) - 65)"
-            [cdkDropListEnterPredicate]="canDrop(row, col.charCodeAt(0) - 65)">
+            [cdkDropListEnterPredicate]="canDrop(row, col.charCodeAt(0) - 65)"
+            (mousedown)="onCellMouseDown($event, row, col.charCodeAt(0) - 65)"
+            (mouseenter)="onCellMouseEnter($event, row, col.charCodeAt(0) - 65)"
+            (mouseup)="onCellMouseUp()">
           <ng-container *ngIf="isSeat(row, col.charCodeAt(0) - 65)">
             <ng-container *ngIf="isSeatReserved(row, col.charCodeAt(0) - 65)">
               <input type="checkbox" class="reserved" checked disabled cdkDrag

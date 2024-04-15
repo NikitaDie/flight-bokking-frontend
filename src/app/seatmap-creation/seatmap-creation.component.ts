@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
+import {Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild} from '@angular/core';
 import {CdkDrag, CdkDragDrop, CdkDragStart, CdkDropList, CdkDropListGroup} from "@angular/cdk/drag-drop";
 import {NgForOf, NgIf} from "@angular/common";
 import {Seatplace} from "../seatplace";
@@ -26,7 +26,15 @@ export class SeatmapCreationComponent implements OnChanges  {
   columns: string[] | undefined;
   dragedCell: Seatplace | undefined;
 
-  constructor() { }
+  @ViewChild('seatmapTable')
+  seatmapTable: ElementRef;
+
+  isMouseDown = false;
+  mouseDownCell!: HTMLElement;
+
+  constructor(seatmapTable: ElementRef) {
+    this.seatmapTable = seatmapTable;
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['seats']) {
@@ -101,6 +109,56 @@ export class SeatmapCreationComponent implements OnChanges  {
 
   canDrop(row: number, col: number) {
     return () => !this.isSeat(row, col);
+  }
+
+  onCellMouseDown(event: MouseEvent, row: number, col: number) {
+
+    this.mouseDownCell = this.getCellElement(row, col);
+    this.mouseDownCell.classList.add('highlighted');
+  }
+
+  onCellMouseEnter(event: MouseEvent, row: number, col: number) {
+    if (this.isMouseDown) {
+      const currentCell = this.getCellElement(row, col);
+      this.highlightCells(this.mouseDownCell, currentCell);
+    }
+  }
+
+  onCellMouseUp() {
+    this.isMouseDown = false;
+  }
+
+  getCellElement(row: number, col: number): HTMLElement {
+    const tableElement = this.seatmapTable.nativeElement as HTMLTableElement;
+    return tableElement.rows[row].cells[col];
+  }
+
+  highlightCells(startCell: HTMLElement, endCell: HTMLElement) {
+    const tableElement = this.seatmapTable.nativeElement as HTMLTableElement;
+    const cells = tableElement.getElementsByTagName('td');
+
+    for (let i = 0; i < cells.length; i++) {
+      const cell = cells[i] as HTMLElement;
+
+      if (this.isBetween(cell, startCell, endCell)) {
+        cell.classList.add('highlighted');
+      } else {
+        cell.classList.remove('highlighted');
+      }
+    }
+  }
+
+  isBetween(cell: HTMLElement, startCell: HTMLElement, endCell: HTMLElement): boolean {
+    const cellRect = cell.getBoundingClientRect();
+    const startCellRect = startCell.getBoundingClientRect();
+    const endCellRect = endCell.getBoundingClientRect();
+
+    return (
+      cellRect.top >= Math.min(startCellRect.top, endCellRect.top) &&
+      cellRect.bottom <= Math.max(startCellRect.bottom, endCellRect.bottom) &&
+      cellRect.left >= Math.min(startCellRect.left, endCellRect.left) &&
+      cellRect.right <= Math.max(startCellRect.right, endCellRect.right)
+    );
   }
 
   protected readonly Number = Number;
