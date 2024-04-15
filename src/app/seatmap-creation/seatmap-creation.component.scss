@@ -41,7 +41,15 @@ input[type="checkbox"] {
   opacity: 0.5;
 }
 
-.highlighted {
-  color: green;
-  background-color: rosybrown;
+.selected-items {
+  border: 1px solid rgba(0, 0, 0, 0.125);
+
+  div {
+    background-color: rgba(0, 0, 0, 0.125);
+    padding: 8px;
+  }
+
+  pre {
+    padding: 10px;
+  }
 }

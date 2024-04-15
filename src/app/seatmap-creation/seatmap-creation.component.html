@@ -5,8 +5,8 @@
     <input type="number" min="1" max="15" #colBox (keyup.enter)="update(Number(colBox.value), 'colBox')"
            (blur)="update(Number(colBox.value), 'colBox')" placeholder="Count of columns">
   </div>
-  <div class="seatmap">
-    <table #seatmapTable>
+  <div class="drag-area">
+    <table #seatmapTable range-selection>
       <thead>
       <tr>
         <th></th>
@@ -19,9 +19,8 @@
         <td *ngFor="let col of columns" cdkDropList
             (cdkDropListDropped)="onDrop($event, row,col.charCodeAt(0) - 65)"
             [cdkDropListEnterPredicate]="canDrop(row, col.charCodeAt(0) - 65)"
-            (mousedown)="onCellMouseDown($event, row, col.charCodeAt(0) - 65)"
-            (mouseenter)="onCellMouseEnter($event, row, col.charCodeAt(0) - 65)"
-            (mouseup)="onCellMouseUp()">
+            (mousedown)="startSelection($event, row, col.charCodeAt(0) - 65)"
+            (mouseup)="endSelection($event, row, col.charCodeAt(0) - 65)">
           <ng-container *ngIf="isSeat(row, col.charCodeAt(0) - 65)">
             <ng-container *ngIf="isSeatReserved(row, col.charCodeAt(0) - 65)">
               <input type="checkbox" class="reserved" checked disabled cdkDrag

@@ -6,6 +6,7 @@ import {NgForOf, NgIf, NgStyle} from "@angular/common";
 import {SeatmapCreationComponent} from "../seatmap-creation/seatmap-creation.component";
 import EventEmitter from "node:events";
 import {Seatplace} from "../seatplace";
+import {ShortcutService} from "ngx-drag-to-select/lib/shortcut.service";
 
 @Component({
   selector: 'app-flight-details',
