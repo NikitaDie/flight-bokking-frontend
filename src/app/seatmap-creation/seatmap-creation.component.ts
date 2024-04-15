@@ -1,25 +1,27 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 import {CdkDrag, CdkDragDrop, CdkDragStart, CdkDropList, CdkDropListGroup} from "@angular/cdk/drag-drop";
 import {NgForOf, NgIf} from "@angular/common";
 import {Seatplace} from "../seatplace";
-import {FlightService} from "../flight-service.service";
-import {ActivatedRoute} from "@angular/router";
+import {ReactiveFormsModule} from "@angular/forms";
 
 @Component({
   selector: 'app-seatmap-creation',
   standalone: true,
-    imports: [
-        CdkDrag,
-        CdkDropList,
-        CdkDropListGroup,
-        NgForOf,
-        NgIf
-    ],
+  imports: [
+    CdkDrag,
+    CdkDropList,
+    CdkDropListGroup,
+    NgForOf,
+    NgIf,
+    ReactiveFormsModule
+  ],
   templateUrl: './seatmap-creation.component.html',
   styleUrl: './seatmap-creation.component.scss'
 })
 export class SeatmapCreationComponent implements OnChanges  {
   @Input() seats: Seatplace[] | undefined;
+  rowInputNumber: number = 0;
+  colInputNumber: number = 0;
   rows: number[] | undefined;
   columns: string[] | undefined;
   dragedCell: Seatplace | undefined;
@@ -28,18 +30,53 @@ export class SeatmapCreationComponent implements OnChanges  {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['seats']) {
-      this.updateRowsAndColumns();
+      this.updateRows(this.getMaxRowIndex());
+      console.log(this.getMaxColIndex());
+      this.updateCols(this.getMaxColIndex() + 1);
     }
   }
 
-  private updateRowsAndColumns() {
-    if (!this.seats) return;
+  update(value: number, source: string) {
+    if (value === undefined) return;
 
-    this.rows = Array.from({ length: Math.max(...this.seats.map(seat => seat.row)) + 1 }, (_, i) => i);
-    this.columns = Array.from({ length: Math.max(...this.seats.map(seat => seat.column)) + 1 },
-      (_, i) => String.fromCharCode(65 + i));
+    if (source === 'rowBox')
+    {
+      if (value < this.getMaxRowIndex())
+        return;
+      if (value > 40)
+        return;
+
+      this.updateRows(value);
+    }
+    else if (source === 'colBox')
+    {
+      if (value < this.getMaxColIndex()  + 1)
+        return;
+      if (value > 15)
+        return;
+
+      this.updateCols(value);
+    }
   }
 
+  private getMaxRowIndex(): number {
+    if (!this.seats) return 1;
+    return Math.max(...this.seats.map(seat => seat.row)) + 1;
+  }
+
+  private updateRows(length: number) {
+    this.rows = Array.from({length: length }, (_, i) => i);
+    console.log(this.rows);
+  }
+
+  private getMaxColIndex(): number {
+    if (!this.seats) return 0;
+    return Math.max(...this.seats.map(seat => seat.column));
+  }
+
+  private updateCols(maxIndex: number) {
+    this.columns = Array.from({length: maxIndex}, (_, i) => String.fromCharCode(65 + i));
+  }
 
   isSeat(row: number, column: number): boolean {
     const seat = this.seats?.find(s => s.row === row && s.column === column);
@@ -65,4 +102,6 @@ export class SeatmapCreationComponent implements OnChanges  {
   canDrop(row: number, col: number) {
     return () => !this.isSeat(row, col);
   }
+
+  protected readonly Number = Number;
 }
