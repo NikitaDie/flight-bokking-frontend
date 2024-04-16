@@ -1,0 +1,26 @@
+
+.menu {
+  padding: 10px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 10px 20px rgba(#404040, 0.15);
+  width: 220px;
+  z-index: 10;
+}
+
+.menu-link {
+  padding: 10px;
+  border-radius: 8px;
+  font-family: "Inter", sans-serif;
+  cursor: pointer;
+  background-color: #fff;
+
+  &:hover {
+    background-color: #f1f3f7;
+  }
+}
+
+.menu-link hr {
+  font-size: 15px;
+}
+

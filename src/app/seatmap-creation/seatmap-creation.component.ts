@@ -46,6 +46,7 @@ export class SeatmapCreationComponent implements OnChanges {
   columns: string[] | undefined;
   dragedCell: Seatplace | undefined;
   selectable: Selectable | undefined;
+  selectedItems: { row: number, column: number }[] = [];
 
   constructor(private elementRef: ElementRef, private cdr: ChangeDetectorRef) { }
 
@@ -97,6 +98,14 @@ export class SeatmapCreationComponent implements OnChanges {
     this.selectable = new Selectable({
       container: this.container.nativeElement
     });
+
+    this.selectable.on('select', () => {
+      this.updateSelection();
+    });
+
+    this.selectable.on('deselect', () => {
+      this.updateSelection();
+    });
   }
 
   private getMaxColIndex(): number {
@@ -111,6 +120,17 @@ export class SeatmapCreationComponent implements OnChanges {
     this.cdr.detectChanges();
     this.selectable = new Selectable({
       container: this.container.nativeElement
+    });
+  }
+
+  updateSelection() {
+    const selectedNodes = this.selectable.getSelectedNodes();
+    this.selectedItems = selectedNodes.map((node: HTMLElement) => {
+      // @ts-ignore
+      const row = Array.from(node.parentElement.parentElement.children).indexOf(node.parentElement);
+      // @ts-ignore
+      const column = Array.from(node.parentElement.children).indexOf(node) - 1;
+      return { row, column };
     });
   }
 
@@ -142,7 +162,16 @@ export class SeatmapCreationComponent implements OnChanges {
   protected readonly Number = Number;
 
   addNewSeatplaces() {
-    if (this.selectable)
-      this.selectable.getSelectedNodes()
+    if (!this.selectable)
+      return;
+
+    this.updateSelection();
+    this.selectedItems.forEach((value) => {
+      if (!this.seats) return;
+      //check if already exists with such coord
+      this.seats.push(new Seatplace("Hi", value.row, value.column, false));
+    });
+    this.selectable.clear();
   }
+
 }

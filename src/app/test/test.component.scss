@@ -1,0 +1,38 @@
+p {
+  font-family: Lato;
+}
+
+th {
+  text-align: center;
+  color: white;
+  border: none;
+}
+
+td {
+  color: white;
+}
+
+.ui-container {
+  margin: 10px;
+  overflow: auto;
+}
+
+.ui-selectable {
+  border: 1px solid red;
+  padding: 8px;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+}
+
+.ui-selecting {
+  background-color: red;
+}
+
+.ui-selected {
+  background-color: green;
+}
+
+.ui-unselecting {
+  background-color: blue;
+}
