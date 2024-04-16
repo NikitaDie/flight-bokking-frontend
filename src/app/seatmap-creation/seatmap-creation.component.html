@@ -5,37 +5,43 @@
     <input type="number" min="1" max="15" #colBox (keyup.enter)="update(Number(colBox.value), 'colBox')"
            (blur)="update(Number(colBox.value), 'colBox')" placeholder="Count of columns">
   </div>
-  <div class="drag-area">
-    <table #seatmapTable range-selection>
+  <div id="container" #container class="ui-container" [cdkContextMenuTriggerFor]="context_menu">
+    <table>
       <thead>
-      <tr>
-        <th></th>
-        <th *ngFor="let col of columns">{{ col }}</th>
-      </tr>
+        <tr>
+          <th></th>
+          <th *ngFor="let col of columns">{{ col }}</th>
+        </tr>
       </thead>
       <tbody cdkDropListGroup>
       <tr *ngFor="let row of rows">
         <td class="rowsNumber">{{ row + 1 }}</td>
-        <td *ngFor="let col of columns" cdkDropList
+        <td *ngFor="let col of columns" cdkDropList class="ui-selectable"
             (cdkDropListDropped)="onDrop($event, row,col.charCodeAt(0) - 65)"
-            [cdkDropListEnterPredicate]="canDrop(row, col.charCodeAt(0) - 65)"
-            (mousedown)="startSelection($event, row, col.charCodeAt(0) - 65)"
-            (mouseup)="endSelection($event, row, col.charCodeAt(0) - 65)">
-          <ng-container *ngIf="isSeat(row, col.charCodeAt(0) - 65)">
-            <ng-container *ngIf="isSeatReserved(row, col.charCodeAt(0) - 65)">
-              <input type="checkbox" class="reserved" checked disabled cdkDrag
-                     (cdkDragStarted)="onDragStarted($event, row, col.charCodeAt(0) - 65)">
+            [cdkDropListEnterPredicate]="canDrop(row, col.charCodeAt(0) - 65)">
+          <div (mousedown)="$event.stopPropagation()">
+            <ng-container *ngIf="isSeat(row, col.charCodeAt(0) - 65)">
+              <ng-container *ngIf="isSeatReserved(row, col.charCodeAt(0) - 65)">
+                <input type="checkbox" class="reserved" checked disabled cdkDrag
+                       (cdkDragStarted)="onDragStarted($event, row, col.charCodeAt(0) - 65)">
+              </ng-container>
+              <ng-container *ngIf="!isSeatReserved(row, col.charCodeAt(0) - 65)">
+                <input type="checkbox" class="available" cdkDrag
+                       (cdkDragStarted)="onDragStarted($event, row, col.charCodeAt(0) - 65)">
+              </ng-container>
             </ng-container>
-            <ng-container *ngIf="!isSeatReserved(row, col.charCodeAt(0) - 65)">
-              <input type="checkbox" class="available" cdkDrag
-                     (cdkDragStarted)="onDragStarted($event, row, col.charCodeAt(0) - 65)">
-            </ng-container>
-          </ng-container>
-          <ng-container *ngIf="!isSeat(row, col.charCodeAt(0) - 65)">
-          </ng-container>
+          </div>
         </td>
       </tr>
       </tbody>
     </table>
   </div>
 </div>
+
+<ng-template #context_menu>
+  <div class="example-menu" cdkMenu>
+    <button class="example-menu-item" cdkMenuItem (click)="addNewSeatplaces()">Insert</button>
+    <button class="example-menu-item" cdkMenuItem>Copy</button>
+    <button class="example-menu-item" cdkMenuItem>Link</button>
+  </div>
+</ng-template>

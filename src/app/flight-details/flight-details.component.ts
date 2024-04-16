@@ -4,9 +4,7 @@ import {FlightService} from "../flight-service.service";
 import {ActivatedRoute} from "@angular/router";
 import {NgForOf, NgIf, NgStyle} from "@angular/common";
 import {SeatmapCreationComponent} from "../seatmap-creation/seatmap-creation.component";
-import EventEmitter from "node:events";
-import {Seatplace} from "../seatplace";
-import {ShortcutService} from "ngx-drag-to-select/lib/shortcut.service";
+import {TestComponent} from "../test/test.component";
 
 @Component({
   selector: 'app-flight-details',
@@ -15,7 +13,8 @@ import {ShortcutService} from "ngx-drag-to-select/lib/shortcut.service";
     NgForOf,
     NgStyle,
     NgIf,
-    SeatmapCreationComponent
+    SeatmapCreationComponent,
+    TestComponent
   ],
   templateUrl: './flight-details.component.html',
   styleUrl: './flight-details.component.scss'

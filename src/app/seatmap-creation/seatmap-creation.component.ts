@@ -1,9 +1,21 @@
-import {AfterViewInit, Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild} from '@angular/core';
+import {
+  AfterViewInit, ChangeDetectorRef,
+  Component,
+  ElementRef,
+  HostListener,
+  Input,
+  OnChanges,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core';
 import {CdkDrag, CdkDragDrop, CdkDragStart, CdkDropList, CdkDropListGroup} from "@angular/cdk/drag-drop";
-import {NgForOf, NgIf} from "@angular/common";
+import {NgForOf, NgIf, NgStyle} from "@angular/common";
 import {Seatplace} from "../seatplace";
 import {ReactiveFormsModule} from "@angular/forms";
-import { DragToSelectModule } from 'ngx-drag-to-select';
+// @ts-ignore
+import Selectable from 'selectable.js';
+import {ContextMenuComponent} from "../context-menu/context-menu.component";
+import {CdkContextMenuTrigger, CdkMenu, CdkMenuItem} from "@angular/cdk/menu";
 
 @Component({
   selector: 'app-seatmap-creation',
@@ -15,25 +27,36 @@ import { DragToSelectModule } from 'ngx-drag-to-select';
     NgForOf,
     NgIf,
     ReactiveFormsModule,
-    DragToSelectModule
+    ContextMenuComponent,
+    NgStyle,
+    CdkContextMenuTrigger,
+    CdkMenu,
+    CdkMenuItem,
   ],
   templateUrl: './seatmap-creation.component.html',
   styleUrl: './seatmap-creation.component.scss'
 })
 export class SeatmapCreationComponent implements OnChanges {
+  // @ts-ignore
+  @ViewChild('container') container: ElementRef;
   @Input() seats: Seatplace[] | undefined;
   rowInputNumber: number = 0;
   colInputNumber: number = 0;
   rows: number[] | undefined;
   columns: string[] | undefined;
   dragedCell: Seatplace | undefined;
+  selectable: Selectable | undefined;
 
-  startSelectionCoord: [number, number] = [-1, -1];
+  constructor(private elementRef: ElementRef, private cdr: ChangeDetectorRef) { }
 
-  ngOnChanges(changes: SimpleChanges) {
+  @HostListener('document:keydown.control', ['$event'])
+  onCtrlKeyDown(event: KeyboardEvent) {
+    console.log(this.selectable.getSelectedItems());
+  }
+
+  async ngOnChanges(changes: SimpleChanges) {
     if (changes['seats']) {
       this.updateRows(this.getMaxRowIndex());
-      console.log(this.getMaxColIndex());
       this.updateCols(this.getMaxColIndex() + 1);
     }
   }
@@ -67,8 +90,13 @@ export class SeatmapCreationComponent implements OnChanges {
   }
 
   private updateRows(length: number) {
+    // if (this.selectable)
+    //   this.selectable.clear();
     this.rows = Array.from({length: length }, (_, i) => i);
-    console.log(this.rows);
+    this.cdr.detectChanges();
+    this.selectable = new Selectable({
+      container: this.container.nativeElement
+    });
   }
 
   private getMaxColIndex(): number {
@@ -77,7 +105,13 @@ export class SeatmapCreationComponent implements OnChanges {
   }
 
   private updateCols(maxIndex: number) {
+    // if (this.selectable)
+    //   this.selectable.clear();
     this.columns = Array.from({length: maxIndex}, (_, i) => String.fromCharCode(65 + i));
+    this.cdr.detectChanges();
+    this.selectable = new Selectable({
+      container: this.container.nativeElement
+    });
   }
 
   isSeat(row: number, column: number): boolean {
@@ -107,19 +141,8 @@ export class SeatmapCreationComponent implements OnChanges {
 
   protected readonly Number = Number;
 
-  startSelection($event: MouseEvent, row: number, col: number) {
-    this.startSelectionCoord = [row, col];
+  addNewSeatplaces() {
+    if (this.selectable)
+      this.selectable.getSelectedNodes()
   }
-
-  endSelection($event: MouseEvent, row: number, col: number) {
-    let maxI = row - this.startSelectionCoord[0];
-    let maxJ = row - this.startSelectionCoord[1];
-
-    for (let i = 0; i < maxI; i++) {
-      for (let j = 0; j < maxJ; j++) {
-        console.log(i + this.startSelectionCoord[0], j + this.startSelectionCoord[1]);
-      }
-    }
-  }
-
 }

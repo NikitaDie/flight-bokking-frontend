@@ -1,14 +1,25 @@
+/*
 table {
   border-collapse: collapse;
-}
+  user-select: none; !* Standard syntax *!
+  -webkit-user-select: none; !* Webkit/Blink browsers *!
+  -moz-user-select: none; !* Gecko browsers *!
+  -ms-user-select: none; !* Internet Explorer/Edge *!
+}*/
 
-.seatmap {
+.main {
   background-color: #1E1F26;
   padding: 8px 24px 8px 8px;
   border-radius: 5px;
   box-shadow: 1px 1px 1rem rgba(0, 0, 0, 0.6);
   width: fit-content;
   height: fit-content;
+}
+
+
+.ui-container {
+  margin: 10px;
+  overflow: auto;
 }
 
 .rowsNumber {
@@ -24,7 +35,7 @@ th {
   border: none;
 }
 
-td {
+.ui-selectable {
   border: 1px solid red;
   padding: 8px;
   width: 30px;
@@ -41,15 +52,48 @@ input[type="checkbox"] {
   opacity: 0.5;
 }
 
-.selected-items {
-  border: 1px solid rgba(0, 0, 0, 0.125);
+.ui-selecting {
+  background-color: red;
+}
 
-  div {
-    background-color: rgba(0, 0, 0, 0.125);
-    padding: 8px;
-  }
+.ui-selected {
+  background-color: green;
+}
 
-  pre {
-    padding: 10px;
-  }
+.ui-unselecting {
+  background-color: blue;
+}
+
+
+example-menu {
+  display: inline-flex;
+  flex-direction: column;
+  min-width: 180px;
+  max-width: 280px;
+  background-color: rgb(255, 255, 255);
+  padding: 6px 0;
+}
+
+.example-menu-item {
+  background-color: transparent;
+  cursor: pointer;
+  border: none;
+
+  user-select: none;
+  min-width: 64px;
+  line-height: 36px;
+  padding: 0 16px;
+
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  flex: 1;
+}
+
+.example-menu-item:hover {
+  background-color: rgb(208, 208, 208);
+}
+
+.example-menu-item:active {
+  background-color: rgb(170, 170, 170);
 }
