@@ -4,7 +4,6 @@ import {FlightService} from "../flight-service.service";
 import {ActivatedRoute} from "@angular/router";
 import {NgForOf, NgIf, NgStyle} from "@angular/common";
 import {SeatmapCreationComponent} from "../seatmap-creation/seatmap-creation.component";
-import {TestComponent} from "../test/test.component";
 
 @Component({
   selector: 'app-flight-details',
@@ -14,7 +13,6 @@ import {TestComponent} from "../test/test.component";
     NgStyle,
     NgIf,
     SeatmapCreationComponent,
-    TestComponent
   ],
   templateUrl: './flight-details.component.html',
   styleUrl: './flight-details.component.scss'

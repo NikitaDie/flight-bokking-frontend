@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   ChangeDetectorRef,
   Component,
   ElementRef,
@@ -40,7 +41,7 @@ import {MatDialogModule} from "@angular/material/dialog";
   templateUrl: './seatmap-creation.component.html',
   styleUrl: './seatmap-creation.component.scss'
 })
-export class SeatmapCreationComponent implements OnChanges {
+export class SeatmapCreationComponent implements OnChanges, AfterViewInit {
   // @ts-ignore
   @ViewChild('container') container: ElementRef;
   @Input() seats: Seatplace[] | undefined;
@@ -50,14 +51,20 @@ export class SeatmapCreationComponent implements OnChanges {
   selectable: Selectable | undefined;
   selectedItems: { row: number, column: number }[] = [];
 
-  constructor(private elementRef: ElementRef, private cdr: ChangeDetectorRef) { }
+  constructor(private elementRef: ElementRef, private cdr: ChangeDetectorRef) {
+    this.selectable = new Selectable({});
+  }
+
+  ngAfterViewInit() {
+    this.resolveSelectable();
+  }
 
   @HostListener('document:keydown.control', ['$event'])
   onCtrlKeyDown(event: KeyboardEvent) {
     console.log(this.selectable.getSelectedItems());
   }
 
-  async ngOnChanges(changes: SimpleChanges) {
+  ngOnChanges(changes: SimpleChanges) {
     if (changes['seats']) {
       this.updateRows(this.getMaxRowIndex());
       this.updateCols(this.getMaxColIndex() + 1);
@@ -92,22 +99,15 @@ export class SeatmapCreationComponent implements OnChanges {
     return Math.max(...this.seats.map(seat => seat.row)) + 1;
   }
 
-  private updateRows(length: number) {
-    // if (this.selectable)
-    //   this.selectable.clear();
-    this.rows = Array.from({length: length }, (_, i) => i);
+  private resolveSelectable()
+  {
     this.cdr.detectChanges();
-    this.selectable = new Selectable({
-      container: this.container.nativeElement
-    });
+    this.selectable.setContainer(this.container.nativeElement);
+  }
 
-    this.selectable.on('select', () => {
-      this.updateSelection();
-    });
-
-    this.selectable.on('deselect', () => {
-      this.updateSelection();
-    });
+  private updateRows(length: number) {
+    this.rows = Array.from({length: length }, (_, i) => i);
+    this.resolveSelectable();
   }
 
   private getMaxColIndex(): number {
@@ -116,16 +116,11 @@ export class SeatmapCreationComponent implements OnChanges {
   }
 
   private updateCols(maxIndex: number) {
-    // if (this.selectable)
-    //   this.selectable.clear();
     this.columns = Array.from({length: maxIndex}, (_, i) => String.fromCharCode(65 + i));
-    this.cdr.detectChanges();
-    this.selectable = new Selectable({
-      container: this.container.nativeElement
-    });
+    this.resolveSelectable();
   }
 
-  updateSelection() {
+  private updateSelection() {
     const selectedNodes = this.selectable.getSelectedNodes();
     this.selectedItems = selectedNodes.map((node: HTMLElement) => {
       // @ts-ignore
@@ -176,7 +171,7 @@ export class SeatmapCreationComponent implements OnChanges {
     this.selectable.clear();
   }
 
-  deleteSeatplace(row: number, col: number) {
+  private deleteSeatplace(row: number, col: number) {
     if(!this.seats) return;
     this.seats = this.seats.filter((value) => !(value.row === row && value.column === col && !value.reserved));
   }
