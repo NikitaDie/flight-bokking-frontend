@@ -45,8 +45,8 @@ export class SeatmapCreationComponent implements OnChanges, AfterViewInit {
   // @ts-ignore
   @ViewChild('container') container: ElementRef;
   @Input() seats: Seatplace[] | undefined;
-  rows: number[] | undefined;
-  columns: string[] | undefined;
+  rows: number[] = [];
+  columns: string[] = [];
   dragedCell: Seatplace | undefined;
   selectable: Selectable | undefined;
   selectedItems: { row: number, column: number }[] = [];
@@ -101,8 +101,17 @@ export class SeatmapCreationComponent implements OnChanges, AfterViewInit {
     this.selectable.setContainer(this.container.nativeElement);
   }
 
-  private updateRows(length: number) {
-    this.rows = Array.from({length: length }, (_, i) => i);
+  private updateRows(length: number = this.rows?.length ?? 0) {
+    let spacing = 0;
+    this.rows = Array.from({length: length }, (_, i) => {
+      if(this.hasRowAnySeats(i))
+        return i - spacing;
+      else
+      {
+        ++spacing;
+        return -1;
+      }
+    });
     this.resolveSelectable();
   }
 
@@ -111,37 +120,20 @@ export class SeatmapCreationComponent implements OnChanges, AfterViewInit {
     return Math.max(...this.seats.map(seat => seat.column));
   }
 
-  private updateCols(maxIndex: number) {
-    let spaces = 0;
+  private updateCols(maxIndex: number = this.columns?.length ?? 0) {
+    let spacing = 0;
     this.columns = Array.from({length: maxIndex}, (_, i) =>
     {
       if (this.hasColAnySeats(i))
-        return String.fromCharCode(65 + i - spaces);
+        return String.fromCharCode(65 + i - spacing);
       else
       {
-        ++spaces;
+        ++spacing;
         return ' ';
       }
     });
     this.resolveSelectable();
   }
-
-  private updateColsOnSeatsChange() {
-    if (!this.columns)
-    {
-      console.log("this.columns is undefined!");
-      return;
-    }
-
-    this.columns = Array.from({length: this.columns?.length}, (_, i) =>
-    {
-      if (this.hasColAnySeats(i))
-        return String.fromCharCode(65 + i);
-      else
-        return ' ';
-    });
-  }
-
 
   private updateSelection() {
     const selectedNodes = this.selectable.getSelectedNodes();
@@ -168,8 +160,9 @@ export class SeatmapCreationComponent implements OnChanges, AfterViewInit {
     if(!this.isSeat(row, col) && this.dragedCell) {
       this.dragedCell.row = row;
       this.dragedCell.column = col;
-      if (this.columns)
-        this.updateCols(this.columns?.length);
+
+      this.updateCols();
+      this.updateRows();
     }
   }
 
@@ -190,10 +183,11 @@ export class SeatmapCreationComponent implements OnChanges, AfterViewInit {
     this.updateSelection();
     this.selectedItems.forEach((value) => {
       if (!this.seats || this.isSeat(value.row, value.column)) return;
-      //check if already exists with such coord
-      this.seats.push(new Seatplace("Hi", value.row, value.column, false));
+      this.seats.push(new Seatplace('', value.row, value.column, false));
     });
-    this.selectable.clear();
+
+    this.updateCols();
+    this.updateRows();
   }
 
   private deleteSeatplace(row: number, col: number) {
@@ -217,6 +211,9 @@ export class SeatmapCreationComponent implements OnChanges, AfterViewInit {
     return colSeats.length > 0;
   }
 
-  protected readonly String = String;
-  skippedColumns:  number = 0;
+  private hasRowAnySeats(row: number): boolean {
+    if (!this.seats) return false;
+    const rowSeats = this.seats.filter((seat) => seat.row === row );
+    return rowSeats.length > 0;
+  }
 }
