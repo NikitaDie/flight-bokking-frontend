@@ -1,4 +1,4 @@
-import {Component, OnInit, Output} from '@angular/core';
+import {Component, ElementRef, OnInit, Output, ViewChild} from '@angular/core';
 import {Flight} from "../flight";
 import {FlightService} from "../flight-service.service";
 import {ActivatedRoute} from "@angular/router";
@@ -18,6 +18,7 @@ import {SeatmapCreationComponent} from "../seatmap-creation/seatmap-creation.com
   styleUrl: './flight-details.component.scss'
 })
 export class FlightDetailsComponent implements OnInit {
+  @ViewChild('seatmap') seatmap!: SeatmapCreationComponent;
   flight: Flight | undefined
 
   constructor(
@@ -40,6 +41,8 @@ export class FlightDetailsComponent implements OnInit {
   onUpdate() {
     if (this.flight)
     {
+      this.seatmap.updateNames();
+      console.log(this.flight);
       this.flightService.updateFlight(this.flight);
     }
   }

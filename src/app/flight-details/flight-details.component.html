@@ -1,5 +1,5 @@
 <div class="flight-details">
-  <app-seatmap-creation [seats]="flight?.seats"></app-seatmap-creation>
+  <app-seatmap-creation #seatmap [seats]="flight?.seats"></app-seatmap-creation>
   <button (click)="onUpdate()">Update</button>
   <h1>Use </h1>
 </div>
