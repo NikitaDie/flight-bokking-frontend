@@ -34,6 +34,7 @@
               </ng-container>
               <ng-container *ngIf="!isSeatReserved(i, j)">
                 <input type="checkbox" class="available" cdkDrag
+                       (change)="setReservation($event, i, j)"
                        (cdkDragStarted)="onDragStarted($event, i, j)">
               </ng-container>
             </ng-container>

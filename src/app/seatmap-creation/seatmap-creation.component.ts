@@ -146,14 +146,17 @@ export class SeatmapCreationComponent implements OnChanges, AfterViewInit {
     });
   }
 
+  getSeat(row: number, column: number): Seatplace | undefined {
+    return this.seats ? this.seats.find(s => s.row === row && s.column === column) : undefined;
+  }
+
   isSeat(row: number, column: number): boolean {
-    const seat = this.seats?.find(s => s.row === row && s.column === column);
-    return !!seat;
+    return !!this.getSeat(row, column)
   }
 
   isSeatReserved(row: number, column: number): boolean {
-    const seat = this.seats?.find(s => s.row === row && s.column === column);
-    return seat ? seat.reserved : false;
+    const seat = this.getSeat(row, column);
+    return seat ? seat.isReserved : false;
   }
 
   onDrop(event: CdkDragDrop<any[]>, row: number, col: number): void {
@@ -183,7 +186,7 @@ export class SeatmapCreationComponent implements OnChanges, AfterViewInit {
     this.updateSelection();
     this.selectedItems.forEach((value) => {
       if (!this.seats || this.isSeat(value.row, value.column)) return;
-      this.seats.push(new Seatplace('', value.row, value.column, false));
+      this.seats.push(new Seatplace('', false, value.row, value.column));
     });
 
     this.updateCols();
@@ -192,7 +195,7 @@ export class SeatmapCreationComponent implements OnChanges, AfterViewInit {
 
   private deleteSeatplace(row: number, col: number) {
     if(!this.seats) return;
-    this.seats = this.seats.filter((seat) => !(seat.row === row && seat.column === col && !seat.reserved));
+    this.seats = this.seats.filter((seat) => !(seat.row === row && seat.column === col && !seat.isReserved));
   }
 
   deleteSeatplaces() {
@@ -203,6 +206,9 @@ export class SeatmapCreationComponent implements OnChanges, AfterViewInit {
     this.selectedItems.forEach((seat => {
       this.deleteSeatplace(seat.row, seat.column)
     }));
+
+    this.updateCols();
+    this.updateRows();
   }
 
   private hasColAnySeats(col: number): boolean {
@@ -215,5 +221,19 @@ export class SeatmapCreationComponent implements OnChanges, AfterViewInit {
     if (!this.seats) return false;
     const rowSeats = this.seats.filter((seat) => seat.row === row );
     return rowSeats.length > 0;
+  }
+
+  updateNames() {
+    this.seats?.forEach(seat => {
+      seat.name = (this.rows[seat.row] + 1) + this.columns[seat.column];
+    });
+  }
+
+  setReservation(event: any, row: number, column: number) {
+    let seat = this.getSeat(row, column);
+    if (!seat)
+      return;
+
+    seat.isReserved = event.target.checked;
   }
 }
