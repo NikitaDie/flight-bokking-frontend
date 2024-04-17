@@ -1,3 +1,5 @@
+@import "@angular/material/prebuilt-themes/indigo-pink.css";
+
 /*
 table {
   border-collapse: collapse;
@@ -64,25 +66,35 @@ input[type="checkbox"] {
   background-color: blue;
 }
 
+.menu-link hr {
+  font-size: 15px;
+}
 
-example-menu {
+.example-menu {
+  z-index: 10;
   display: inline-flex;
   flex-direction: column;
+  padding: 10px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 10px 20px rgba(#404040, 0.15);
   min-width: 180px;
   max-width: 280px;
-  background-color: rgb(255, 255, 255);
-  padding: 6px 0;
 }
 
 .example-menu-item {
-  background-color: transparent;
   cursor: pointer;
   border: none;
 
+  margin: 3px;
+  padding: 10px;
+  border-radius: 8px;
+  font-family: "Inter", sans-serif;
+  background-color: #fff;
+
   user-select: none;
   min-width: 64px;
-  line-height: 36px;
-  padding: 0 16px;
+  line-height: 16px;
 
   display: flex;
   align-items: center;
@@ -91,9 +103,5 @@ example-menu {
 }
 
 .example-menu-item:hover {
-  background-color: rgb(208, 208, 208);
-}
-
-.example-menu-item:active {
-  background-color: rgb(170, 170, 170);
+  background-color: #f1f3f7;
 }

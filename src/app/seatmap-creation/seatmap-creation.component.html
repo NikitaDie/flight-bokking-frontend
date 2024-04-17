@@ -41,7 +41,6 @@
 <ng-template #context_menu>
   <div class="example-menu" cdkMenu>
     <button class="example-menu-item" cdkMenuItem (click)="addNewSeatplaces()">Insert</button>
-    <button class="example-menu-item" cdkMenuItem>Copy</button>
-    <button class="example-menu-item" cdkMenuItem>Link</button>
+    <button class="example-menu-item" cdkMenuItem (click)="deleteSeatplaces()">Delete</button>
   </div>
 </ng-template>

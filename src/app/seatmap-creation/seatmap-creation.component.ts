@@ -1,5 +1,5 @@
 import {
-  AfterViewInit, ChangeDetectorRef,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   HostListener,
@@ -15,7 +15,9 @@ import {ReactiveFormsModule} from "@angular/forms";
 // @ts-ignore
 import Selectable from 'selectable.js';
 import {ContextMenuComponent} from "../context-menu/context-menu.component";
-import {CdkContextMenuTrigger, CdkMenu, CdkMenuItem} from "@angular/cdk/menu";
+import {CdkContextMenuTrigger, CdkMenu, CdkMenuItem, CdkMenuTrigger} from "@angular/cdk/menu";
+import '@angular/material/dialog';
+import {MatDialogModule} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-seatmap-creation',
@@ -32,6 +34,8 @@ import {CdkContextMenuTrigger, CdkMenu, CdkMenuItem} from "@angular/cdk/menu";
     CdkContextMenuTrigger,
     CdkMenu,
     CdkMenuItem,
+    CdkMenuTrigger,
+    MatDialogModule
   ],
   templateUrl: './seatmap-creation.component.html',
   styleUrl: './seatmap-creation.component.scss'
@@ -40,8 +44,6 @@ export class SeatmapCreationComponent implements OnChanges {
   // @ts-ignore
   @ViewChild('container') container: ElementRef;
   @Input() seats: Seatplace[] | undefined;
-  rowInputNumber: number = 0;
-  colInputNumber: number = 0;
   rows: number[] | undefined;
   columns: string[] | undefined;
   dragedCell: Seatplace | undefined;
@@ -167,11 +169,26 @@ export class SeatmapCreationComponent implements OnChanges {
 
     this.updateSelection();
     this.selectedItems.forEach((value) => {
-      if (!this.seats) return;
+      if (!this.seats || this.isSeat(value.row, value.column)) return;
       //check if already exists with such coord
       this.seats.push(new Seatplace("Hi", value.row, value.column, false));
     });
     this.selectable.clear();
+  }
+
+  deleteSeatplace(row: number, col: number) {
+    if(!this.seats) return;
+    this.seats = this.seats.filter((value) => !(value.row === row && value.column === col && !value.reserved));
+  }
+
+  deleteSeatplaces() {
+    if (!this.selectable)
+      return;
+
+    this.updateSelection();
+    this.selectedItems.forEach((seat => {
+      this.deleteSeatplace(seat.row, seat.column)
+    }));
   }
 
 }
