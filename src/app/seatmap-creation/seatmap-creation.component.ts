@@ -59,11 +59,6 @@ export class SeatmapCreationComponent implements OnChanges, AfterViewInit {
     this.resolveSelectable();
   }
 
-  @HostListener('document:keydown.control', ['$event'])
-  onCtrlKeyDown(event: KeyboardEvent) {
-    console.log(this.selectable.getSelectedItems());
-  }
-
   ngOnChanges(changes: SimpleChanges) {
     if (changes['seats']) {
       this.updateRows(this.getMaxRowIndex());
@@ -101,6 +96,7 @@ export class SeatmapCreationComponent implements OnChanges, AfterViewInit {
 
   private resolveSelectable()
   {
+    this.selectable.clear();
     this.cdr.detectChanges();
     this.selectable.setContainer(this.container.nativeElement);
   }
@@ -116,9 +112,36 @@ export class SeatmapCreationComponent implements OnChanges, AfterViewInit {
   }
 
   private updateCols(maxIndex: number) {
-    this.columns = Array.from({length: maxIndex}, (_, i) => String.fromCharCode(65 + i));
+    let spaces = 0;
+    this.columns = Array.from({length: maxIndex}, (_, i) =>
+    {
+      if (this.hasColAnySeats(i))
+        return String.fromCharCode(65 + i - spaces);
+      else
+      {
+        ++spaces;
+        return ' ';
+      }
+    });
     this.resolveSelectable();
   }
+
+  private updateColsOnSeatsChange() {
+    if (!this.columns)
+    {
+      console.log("this.columns is undefined!");
+      return;
+    }
+
+    this.columns = Array.from({length: this.columns?.length}, (_, i) =>
+    {
+      if (this.hasColAnySeats(i))
+        return String.fromCharCode(65 + i);
+      else
+        return ' ';
+    });
+  }
+
 
   private updateSelection() {
     const selectedNodes = this.selectable.getSelectedNodes();
@@ -145,6 +168,8 @@ export class SeatmapCreationComponent implements OnChanges, AfterViewInit {
     if(!this.isSeat(row, col) && this.dragedCell) {
       this.dragedCell.row = row;
       this.dragedCell.column = col;
+      if (this.columns)
+        this.updateCols(this.columns?.length);
     }
   }
 
@@ -173,7 +198,7 @@ export class SeatmapCreationComponent implements OnChanges, AfterViewInit {
 
   private deleteSeatplace(row: number, col: number) {
     if(!this.seats) return;
-    this.seats = this.seats.filter((value) => !(value.row === row && value.column === col && !value.reserved));
+    this.seats = this.seats.filter((seat) => !(seat.row === row && seat.column === col && !seat.reserved));
   }
 
   deleteSeatplaces() {
@@ -186,4 +211,12 @@ export class SeatmapCreationComponent implements OnChanges, AfterViewInit {
     }));
   }
 
+  private hasColAnySeats(col: number): boolean {
+    if (!this.seats) return false;
+    const colSeats = this.seats.filter((seat) => seat.column === col);
+    return colSeats.length > 0;
+  }
+
+  protected readonly String = String;
+  skippedColumns:  number = 0;
 }

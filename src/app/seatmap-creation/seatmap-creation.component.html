@@ -16,18 +16,18 @@
       <tbody cdkDropListGroup>
       <tr *ngFor="let row of rows">
         <td class="rowsNumber">{{ row + 1 }}</td>
-        <td *ngFor="let col of columns" cdkDropList class="ui-selectable"
-            (cdkDropListDropped)="onDrop($event, row,col.charCodeAt(0) - 65)"
-            [cdkDropListEnterPredicate]="canDrop(row, col.charCodeAt(0) - 65)">
+        <td *ngFor="let col of columns; let j = index" cdkDropList class="ui-selectable"
+            (cdkDropListDropped)="onDrop($event, row, j)"
+            [cdkDropListEnterPredicate]="canDrop(row, j)">
           <div (mousedown)="$event.stopPropagation()">
-            <ng-container *ngIf="isSeat(row, col.charCodeAt(0) - 65)">
-              <ng-container *ngIf="isSeatReserved(row, col.charCodeAt(0) - 65)">
+            <ng-container *ngIf="isSeat(row, j)">
+              <ng-container *ngIf="isSeatReserved(row, j)">
                 <input type="checkbox" class="reserved" checked disabled cdkDrag
-                       (cdkDragStarted)="onDragStarted($event, row, col.charCodeAt(0) - 65)">
+                       (cdkDragStarted)="onDragStarted($event, row, j)">
               </ng-container>
-              <ng-container *ngIf="!isSeatReserved(row, col.charCodeAt(0) - 65)">
+              <ng-container *ngIf="!isSeatReserved(row, j)">
                 <input type="checkbox" class="available" cdkDrag
-                       (cdkDragStarted)="onDragStarted($event, row, col.charCodeAt(0) - 65)">
+                       (cdkDragStarted)="onDragStarted($event, row, j)">
               </ng-container>
             </ng-container>
           </div>
