@@ -38,12 +38,16 @@ export class FlightDetailsComponent implements OnInit {
     }
   }
 
-  onUpdate() {
+  async onUpdate() {
     if (this.flight)
     {
       this.seatmap.updateNames();
       console.log(this.flight);
-      this.flightService.updateFlight(this.flight);
+      await this.flightService.updateFlight(this.flight);
+      this.flightService.getFlight(this.flight.id)
+        .subscribe(flight => {
+          this.flight = flight;
+        });
     }
   }
 }

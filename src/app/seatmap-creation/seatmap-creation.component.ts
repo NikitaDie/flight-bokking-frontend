@@ -3,7 +3,6 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
-  HostListener,
   Input,
   OnChanges,
   SimpleChanges,
@@ -186,6 +185,7 @@ export class SeatmapCreationComponent implements OnChanges, AfterViewInit {
     this.updateSelection();
     this.selectedItems.forEach((value) => {
       if (!this.seats || this.isSeat(value.row, value.column)) return;
+      console.log(value.row, value.column);
       this.seats.push(new Seatplace('', false, value.row, value.column));
     });
 
