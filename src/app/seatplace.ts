@@ -1,6 +1,5 @@
 export class Seatplace
 {
-  //reservedBy?: string;
   public readonly id: number | null = null;
   name: string;
   isReserved: boolean;

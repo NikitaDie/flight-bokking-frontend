@@ -195,7 +195,15 @@ export class SeatmapCreationComponent implements OnChanges, AfterViewInit {
 
   private deleteSeatplace(row: number, col: number) {
     if(!this.seats) return;
-    this.seats = this.seats.filter((seat) => !(seat.row === row && seat.column === col && !seat.isReserved));
+
+    //delete this.seats.find(s => s.row === row && s.column === col);
+
+    const index = this.seats.findIndex(s => s.row === row && s.column === col && !s.isReserved);
+    if (index !== -1 ) {
+      this.seats.splice(index, 1);
+    }
+    //this.seats = this.seats.filter((seat) => !(seat.row === row && seat.column === col && !seat.isReserved));
+
   }
 
   deleteSeatplaces() {
@@ -209,6 +217,7 @@ export class SeatmapCreationComponent implements OnChanges, AfterViewInit {
 
     this.updateCols();
     this.updateRows();
+    console.log(this.seats)
   }
 
   private hasColAnySeats(col: number): boolean {

@@ -42,19 +42,26 @@
 }
 
 .create-flight {
-  border: red dashed 3px;
+  border: #0D99FF dashed 4px;
   background-color: transparent;
+  &:hover {
+    background-color: #0D99FF;
+    .icon-new {
+      stroke: white;
+    }
+  }
 }
 
 .icon-new {
   width: 108px;
   height: 108px;
   fill: none;
-  stroke: red;
-  stroke-width: 2px;
+  stroke: #0D99FF;
+  stroke-width: 1px;
 }
 
 .flight-list button {
+  transition: all 0.3s ease;
   width: 270px;
   padding: 10px;
   margin: 10px;
@@ -67,10 +74,9 @@
   background-color: #1E1F26;
   box-shadow: 1px 1px 1rem rgba(0, 0, 0, 0.6);
   border: none;
-}
-
-.flight-item :hover {
-  transform: scale(1.1);
+  &:hover {
+    transform: scale(1.1);
+  }
 }
 
 .flight-item b {
