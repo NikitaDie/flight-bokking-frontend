@@ -4,6 +4,8 @@ import {FlightService} from "../flight-service.service";
 import {ActivatedRoute} from "@angular/router";
 import {NgForOf, NgIf, NgStyle} from "@angular/common";
 import {SeatmapCreationComponent} from "../seatmap-creation/seatmap-creation.component";
+import {Seatplace} from "../seatplace";
+import {FormsModule} from "@angular/forms";
 
 @Component({
   selector: 'app-flight-details',
@@ -13,13 +15,15 @@ import {SeatmapCreationComponent} from "../seatmap-creation/seatmap-creation.com
     NgStyle,
     NgIf,
     SeatmapCreationComponent,
+    FormsModule,
   ],
   templateUrl: './flight-details.component.html',
   styleUrl: './flight-details.component.scss'
 })
 export class FlightDetailsComponent implements OnInit {
   @ViewChild('seatmap') seatmap!: SeatmapCreationComponent;
-  flight: Flight | undefined
+  // @ts-ignore
+  flight: Flight
 
   constructor(
     private flightService: FlightService,
@@ -34,16 +38,20 @@ export class FlightDetailsComponent implements OnInit {
           this.flight = flight;
         });
     } else {
-      console.error('Flight ID not found in route parameters');
+      this.flight = new Flight('', []);
     }
   }
 
-  onUpdate() {
+  async onUpdate() {
     if (this.flight)
     {
       this.seatmap.updateNames();
       console.log(this.flight);
-      this.flightService.updateFlight(this.flight);
+      await this.flightService.updateFlight(this.flight);
+      this.flightService.getFlightByName(this.flight.name)
+        .subscribe(flight => {
+          this.flight = flight;
+        });
     }
   }
 }

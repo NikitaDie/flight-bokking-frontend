@@ -22,8 +22,12 @@ export class FlightService {
     return this.http.get<Flight>(`${this.baseUrl}/flights/${id}`);
   }
 
-  public updateFlight(flight: Flight) {
-    this.http.put(`${this.baseUrl}/flights`, flight).subscribe();
+  public getFlightByName(name: String): Observable<Flight> {
+    return this.http.get<Flight>(`${this.baseUrl}/flights/${name}`);
+  }
+
+  public async updateFlight(flight: Flight) {
+    await this.http.put(`${this.baseUrl}/flights`, flight).toPromise();
   }
 
 }

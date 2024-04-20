@@ -1,4 +1,6 @@
 <div class="flight-details">
+  <input required
+         [(ngModel)]="flight.name">
   <app-seatmap-creation #seatmap [seats]="flight?.seats"></app-seatmap-creation>
   <button (click)="onUpdate()">Update</button>
   <h1>Use </h1>

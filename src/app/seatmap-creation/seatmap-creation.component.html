@@ -1,9 +1,9 @@
 <div class="main">
   <div class="tableParamsInput">
     <input type="number" min="1" max="40" #rowBox (keyup.enter)="update(Number(rowBox.value), 'rowBox')"
-           (blur)="update(Number(rowBox.value), 'rowBox')" placeholder="Count of rows">
+           placeholder="Count of rows">
     <input type="number" min="1" max="15" #colBox (keyup.enter)="update(Number(colBox.value), 'colBox')"
-           (blur)="update(Number(colBox.value), 'colBox')" placeholder="Count of columns">
+           placeholder="Count of columns">
   </div>
   <div id="container" #container class="ui-container" [cdkContextMenuTriggerFor]="context_menu">
     <table>

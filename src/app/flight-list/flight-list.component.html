@@ -1,6 +1,6 @@
 <div class="flights-container">
   <div class="search-box">
-    <svg xmlns="http://www.w3.org/2000/svg"  class="icon-search">
+    <svg xmlns="http://www.w3.org/2000/svg"  class="icon-search" viewBox="0 0 24 24" >
       <path stroke="none" d="M0 0h24v24H0z" fill="none" />
       <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
       <path d="M21 21l-6 -6" />
@@ -8,8 +8,18 @@
     <input type="text" placeholder="Search..">
   </div>
   <ul class="flight-list">
+    <li>
+      <button class="create-flight" [routerLink]="['/flights', null]">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon-new" viewBox="0 0 24 24" >
+          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+          <path d="M9 12h6" />
+          <path d="M12 9v6" />
+          <path d="M3 5a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-14z" />
+        </svg>
+      </button>
+    </li>
     <li *ngFor="let flight of flights">
-      <button class="btn btn-primary" [routerLink]="['/flights', flight.id]">
+      <button class="flight-item" [routerLink]="['/flights', flight.id]">
         <b>{{ flight.name }}</b>
         <p>Total number of Seats: {{ flight.totalSeatsCount }}</p>
         <p>Booked Seats: {{ flight.bookedSeatsCount }}</p>
